@@ -1,3 +1,4 @@
+import argparse
 import pandas as pd
 from pylatex import (
     Document,
@@ -14,12 +15,38 @@ from pylatex import (
     LongTabu,
 )
 
-if __name__ == "__main__":
-    EXCEL_FILE = "Force Table.xlsx"
-    BEAM_IMAGE = "Simply Supported Beam.png"
-    OUTPUT_PDF = "report"
 
-    df = pd.read_excel(EXCEL_FILE)
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Generate an engineering report using PyLaTeX."
+    )
+
+    parser.add_argument(
+        "--excel",
+        "-e",
+        default="Force Table.xlsx",
+        help="Path to the Excel file containing force data.",
+    )
+
+    parser.add_argument(
+        "--image",
+        "-i",
+        default="Simply Supported Beam.png",
+        help="Path to the beam image.",
+    )
+
+    parser.add_argument(
+        "--output",
+        "-o",
+        default="Report",
+        help="Output PDF file name (without extension).",
+    )
+
+    return parser.parse_args()
+
+
+def generate_report(excel_file, beam_image, output_pdf):
+    df = pd.read_excel(excel_file)
 
     geometry_options = {"margin": "1in"}
     doc = Document(geometry_options=geometry_options)
@@ -42,7 +69,7 @@ if __name__ == "__main__":
                 "Below is the schematic representation of the simply supported beam used in this analysis."
             )
             with doc.create(Figure(position="h!")) as fig:
-                fig.add_image(BEAM_IMAGE, width=NoEscape(r"0.8\textwidth"))
+                fig.add_image(beam_image, width=NoEscape(r"0.8\textwidth"))
                 fig.add_caption("Simply Supported Beam Configuration")
         with doc.create(Subsection("Data Source")):
             doc.append("The force table extracted from the Excel sheet is shown below:")
@@ -86,4 +113,9 @@ if __name__ == "__main__":
                             )
                         )
 
-    doc.generate_pdf(OUTPUT_PDF, clean_tex=False)
+    doc.generate_pdf(output_pdf, clean_tex=False)
+
+
+if __name__ == "__main__":
+    args = parse_args()
+    generate_report(args.excel, args.image, args.output)
