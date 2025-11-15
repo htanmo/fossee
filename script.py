@@ -71,7 +71,9 @@ def generate_report(excel_file, beam_image, output_pdf):
             with doc.create(Figure(position="h!")) as fig:
                 fig.add_image(beam_image, width=NoEscape(r"0.8\textwidth"))
                 fig.add_caption("Simply Supported Beam Configuration")
-        with doc.create(Subsection("Data Source")):
+
+    with doc.create(Section("Data Source")):
+        with doc.create(Subsection("Input Data Table")):
             doc.append("The force table extracted from the Excel sheet is shown below:")
             with doc.create(LongTabu("|l|l|l|")) as table:
                 table.add_hline()
