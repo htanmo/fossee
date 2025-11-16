@@ -11,7 +11,7 @@ The project requirement is listed [here](./PyLaTex%20report%20Screening%20task.p
   sudo apt-get install texlive-full
   ```
 
-1. Install Python dependencies:
+2. Install Python dependencies:
   - using uv:
   ```sh
   uv sync
