@@ -71,18 +71,22 @@ def generate_report(excel_file, beam_image, output_pdf):
             with doc.create(Figure(position="h!")) as fig:
                 fig.add_image(beam_image, width=NoEscape(r"0.8\textwidth"))
                 fig.add_caption("Simply Supported Beam Configuration")
+        with doc.create(Subsection("Data Source")):
+            doc.append(
+                "The internal force data used in this report is extracted from the provided Excel sheet."
+            )
 
-    with doc.create(Section("Data Source")):
-        with doc.create(Subsection("Input Data Table")):
-            doc.append("The force table extracted from the Excel sheet is shown below:")
-            with doc.create(LongTabu("|l|l|l|")) as table:
-                table.add_hline()
-                table.add_row(df.columns.tolist())
-                table.add_hline()
+    doc.append(NewPage())
+    with doc.create(Section("Input Data Table")):
+        doc.append("The force table extracted from the Excel sheet is shown below:")
+        with doc.create(LongTabu("|l|l|l|")) as table:
+            table.add_hline()
+            table.add_row(df.columns.tolist())
+            table.add_hline()
 
-                for _, row in df.iterrows():
-                    table.add_row(row.tolist())
-                    table.add_hline()
+            for _, row in df.iterrows():
+                table.add_row(row.tolist())
+                table.add_hline()
 
     doc.append(NewPage())
     with doc.create(Section("Analysis")):
